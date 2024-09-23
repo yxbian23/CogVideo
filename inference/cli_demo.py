@@ -71,12 +71,12 @@ def generate_video(
     video = None
 
     if generate_type == "i2v":
-        pipe = CogVideoXImageToVideoPipeline.from_pretrained(model_path, torch_dtype=dtype)
+        pipe = CogVideoXImageToVideoPipeline.from_pretrained(model_path, torch_dtype=dtype, device_map="balanced")
         image = load_image(image=image_or_video_path)
     elif generate_type == "t2v":
-        pipe = CogVideoXPipeline.from_pretrained(model_path, torch_dtype=dtype)
+        pipe = CogVideoXPipeline.from_pretrained(model_path, torch_dtype=dtype, device_map="balanced")
     else:
-        pipe = CogVideoXVideoToVideoPipeline.from_pretrained(model_path, torch_dtype=dtype)
+        pipe = CogVideoXVideoToVideoPipeline.from_pretrained(model_path, torch_dtype=dtype, device_map="balanced")
         video = load_video(image_or_video_path)
 
     # If you're using with lora, add this code
@@ -98,7 +98,7 @@ def generate_video(
 
     # pipe.to("cuda")
 
-    pipe.enable_sequential_cpu_offload()
+    # pipe.enable_sequential_cpu_offload()
 
     pipe.vae.enable_slicing()
     pipe.vae.enable_tiling()
